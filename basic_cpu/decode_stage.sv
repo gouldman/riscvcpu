@@ -8,8 +8,9 @@ module decode_stage(
     input reset_n,
     input instruction_type instruction,
     input logic [31:0] pc,
+    input logic hazard,
     input logic write_en,
-    input logic [5:0] write_id,
+    input logic [4:0] write_id,
     input logic [31:0] write_data,
     output logic [5:0] reg_rd_id,
     output logic [31:0] read_data1,
@@ -49,6 +50,6 @@ module decode_stage(
     assign read_data1 = rf_read_data1;
     assign read_data2 = rf_read_data2;
     assign immediate_data = immediate_extension(instruction, controls.encoding);
-    assign control_signals = controls;
+    assign control_signals = hazard ? '0 : controls;
     
 endmodule

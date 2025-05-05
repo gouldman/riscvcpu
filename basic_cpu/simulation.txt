@@ -1,0 +1,39 @@
+vlib work
+vlog +incdir+. common.sv
+vlog +incdir+. data_memory.sv register_file.sv control.sv alu.sv forward_unit.sv hazard_detect_unit.sv
+vlog +incdir+. program_memory.sv fetch_stage.sv decode_stage.sv execute_stage.sv mem_stage.sv
+vlog +incdir+. cpu.sv
+vlog +incdir+. cpu_tb.sv
+vopt +acc work.cpu_tb -o opt -debugdb
+
+vsim  -debugdb work.cpu_tb 
+
+log -r /*
+
+
+#add wave  -radix unsigned  *
+add wave -radix unsigned dut/*
+
+add wave -radix unsigned dut/inst_execute_stage/*
+add wave -radix unsigned dut/inst_mem_stage/inst_mem/*
+#add wave -radix unsigned dut/inst_forward/*
+add wave -radix unsigned dut/inst_decode_stage/rf_inst/*
+
+#add wave -radix unsigned dut/pe/*
+
+#add wave -radix unsigned dut/pe/pic
+#add wave -radix unsigned dut/pe/weight
+
+
+# Add adder_tree signals
+#add wave  -radix unsigned dut/pe/adder_tree/*
+#add wave  -radix unsigned dut/pe/fm_results
+# Add delay_module signals
+#add wave  -radix unsigned dut/pe/delay_3/*
+# 6. 在控制台显示仿真中的变量值
+write timing
+# 7. 显示仿真中的进程和任务
+
+run -all
+wave zoom full
+add schematic sim:/cpu_tb

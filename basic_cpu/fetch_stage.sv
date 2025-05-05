@@ -5,7 +5,8 @@ module fetch_stage(
     input clk,
     input reset_n,
     output logic [31:0] address,
-    input [31:0] data
+    input [31:0] data,
+    input hazard
 );
 
     logic [31:0] pc_next, pc_reg;
@@ -22,7 +23,10 @@ module fetch_stage(
         
         
     always_comb begin
-        pc_next = pc_reg + 4;      
+        if(hazard) 
+            pc_next = pc_reg;
+        else
+            pc_next = pc_reg + 4;      
     end
     
     
